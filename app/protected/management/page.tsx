@@ -12,6 +12,8 @@ import {
   updateGlobalMonitoringLevel,
   updateProfileMonitoringLevel,
 } from "@/lib/profiles";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 interface Domain {
   id: number;
@@ -39,11 +41,48 @@ export default function ManagementPage() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [monitoringLoading, setMonitoringLoading] = useState(false);
   const [monitoringError, setMonitoringError] = useState<string | null>(null);
+  const [authorized, setAuthorized] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
 
   useEffect(() => {
-    fetchDomains();
-    fetchProfilesData();
+    checkAuthorization();
   }, []);
+
+  useEffect(() => {
+    if (authorized) {
+      fetchDomains();
+      fetchProfilesData();
+    }
+  }, [authorized]);
+
+  async function checkAuthorization() {
+    const supabase = createClient();
+    const { data: authData } = await supabase.auth.getClaims();
+    const userId = authData?.claims?.sub;
+
+    if (!userId) {
+      window.location.href = "/auth/login";
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", userId)
+      .single();
+
+    const userRole = profile?.role?.toLowerCase() || "employee";
+
+    if (userRole !== "manager") {
+      setAccessDenied(true);
+      setTimeout(() => {
+        window.location.href = "/protected/logs";
+      }, 2000);
+      return;
+    }
+
+    setAuthorized(true);
+  }
 
   async function fetchProfilesData() {
     setMonitoringLoading(true);
@@ -145,6 +184,27 @@ export default function ManagementPage() {
 
   async function handleDeny(id: number) {
     await handleRemove(id);
+  }
+
+  // Show access denied message
+  if (accessDenied) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="bg-destructive/10 text-destructive p-6 rounded-lg max-w-md">
+          <p className="font-semibold text-lg mb-2">Access Denied</p>
+          <p>Only managers can access this page. Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading while checking authorization
+  if (!authorized) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-lg">Checking authorization...</div>
+      </div>
+    );
   }
 
   const pendingDomains = domains.filter((d) => d.category === "PENDING");

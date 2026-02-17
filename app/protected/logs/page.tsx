@@ -1,14 +1,43 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { redirect } from "next/navigation";
 
 export default async function LogsPage() {
   const supabase = await createClient();
-  const { data: logs, error } = await supabase
+
+  // Get current user
+  const { data: authData } = await supabase.auth.getClaims();
+  const userId = authData?.claims?.sub;
+
+  if (!userId) {
+    redirect("/auth/login");
+  }
+
+  // Fetch user's profile to get role
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .single();
+
+  const userRole = profile?.role?.toLowerCase() || "employee";
+
+  // Build query based on role
+  let logsQuery = supabase
     .from("logs")
     .select(
       `id, created_at, user_id, domain, ai_tool_name, ai_category, url, log_type, action, profiles:profiles(username)`,
-    )
-    .order("created_at", { ascending: false });
+    );
+
+  // If employee, only show their own logs
+  if (userRole === "employee") {
+    logsQuery = logsQuery.eq("user_id", userId);
+  }
+  // If manager, show all logs (no filter needed)
+
+  const { data: logs, error } = await logsQuery.order("created_at", {
+    ascending: false,
+  });
 
   // Group logs by username
   const groupedLogs: { [username: string]: any[] } = {};
