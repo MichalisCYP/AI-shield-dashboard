@@ -21,6 +21,12 @@ export default function Home() {
                 <Shield className="h-5 w-5 text-primary" />
                 <span>AI Shield</span>
               </Link>
+              <Link
+                href="/protected"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Dashboard
+              </Link>
             </div>
             {!hasEnvVars ? (
               <EnvVarWarning />

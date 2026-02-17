@@ -1,4 +1,5 @@
 import { Shield } from "lucide-react";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -28,6 +29,13 @@ export function Hero() {
           when using AI tools. Real-time detection, contextual warnings, and
           comprehensive visibility.
         </p>
+        <Link
+          href="/protected"
+          className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
+        >
+          <Shield className="h-4 w-4" />
+          Go to Dashboard
+        </Link>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6 w-full mt-4">

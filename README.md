@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+  <a href="https://ai-shield-dashboard.vercel.app/protected"><strong>Live Demo →</strong></a>
+</p>
+
+<p align="center">
   AI Shield is a Chrome extension and dashboard solution that provides real-time visibility into AI tool usage, 
   guides employees toward safer practices, and prevents accidental data leakage.
 </p>
