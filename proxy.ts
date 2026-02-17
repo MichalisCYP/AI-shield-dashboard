@@ -1,14 +1,8 @@
 import { updateSession } from "@/lib/supabase/proxy";
-import { type NextRequest, NextResponse } from "next/server";
+import { type NextRequest } from "next/server";
 
 export async function proxy(request: NextRequest) {
-  const session = await updateSession(request);
-
-  if (session) {
-    return NextResponse.redirect(new URL("/protected", request.url));
-  }
-
-  return session;
+  return await updateSession(request);
 }
 
 export const config = {
