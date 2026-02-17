@@ -32,3 +32,16 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
 }
+
+export async function PATCH(req: NextRequest) {
+  const supabase = await createClient();
+  const { id, category } = await req.json();
+  const { data, error } = await supabase
+    .from("domains")
+    .update({ category })
+    .eq("id", id)
+    .select();
+  if (error)
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data[0]);
+}

@@ -30,9 +30,9 @@ export default function ProtectedLayout({
           )}
         </div>
       </nav>
-      <div className="flex flex-row w-full max-w-5xl mx-auto p-5 gap-8 flex-1">
+      <div className="flex flex-row w-full p-5 gap-8 flex-1">
         {/* Side Navigation */}
-        <aside className="w-48 min-h-[calc(100vh-4rem)] border-r border-border bg-background flex flex-col py-6 gap-2">
+        <aside className="w-48 min-h-[calc(100vh-4rem)] border-r border-border bg-background flex flex-col py-6 gap-2 pl-4">
           <Link
             href="/protected/overview"
             className="px-4 py-2 rounded hover:bg-accent font-medium"

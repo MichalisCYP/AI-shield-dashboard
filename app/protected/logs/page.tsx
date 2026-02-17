@@ -31,11 +31,14 @@ export default async function LogsPage() {
             Error loading logs: {error.message}
           </div>
         )}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto space-y-6">
           {Object.keys(groupedLogs).length > 0 ? (
             Object.entries(groupedLogs).map(([username, userLogs]) => (
-              <div key={username} className="mb-8">
-                <div className="font-semibold text-lg mb-2">
+              <div
+                key={username}
+                className="border-2 rounded-lg p-4 bg-muted/30"
+              >
+                <div className="font-bold text-xl mb-4 pb-2 border-b-2">
                   Username: {username}
                 </div>
                 <table className="min-w-full text-sm">

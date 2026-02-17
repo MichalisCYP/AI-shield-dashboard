@@ -32,6 +32,8 @@ export default function ManagementPage() {
   const [form, setForm] = useState({ name: "", domain: "", category: "" });
   const [adding, setAdding] = useState(false);
   const [removing, setRemoving] = useState<number | null>(null);
+  const [approving, setApproving] = useState<number | null>(null);
+  const [approvingCategory, setApprovingCategory] = useState("");
 
   // Monitoring level state
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -112,8 +114,112 @@ export default function ManagementPage() {
     }
   }
 
+  async function handleApprove(id: number, category: string) {
+    if (!category.trim()) {
+      setError("Category is required");
+      return;
+    }
+    setApproving(id);
+    setError(null);
+    try {
+      const res = await fetch("/api/domains", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, category }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setDomains((prev) =>
+          prev.map((d) => (d.id === id ? { ...d, category } : d)),
+        );
+        setApprovingCategory("");
+      } else {
+        setError(data.error || "Failed to approve domain");
+      }
+    } catch (e: any) {
+      setError(e.message || "Failed to approve domain");
+    } finally {
+      setApproving(null);
+    }
+  }
+
+  async function handleDeny(id: number) {
+    await handleRemove(id);
+  }
+
+  const pendingDomains = domains.filter((d) => d.category === "PENDING");
+  const approvedDomains = domains.filter((d) => d.category !== "PENDING");
+
   return (
     <div className="flex flex-col gap-8">
+      {/* Pending Domains Card */}
+      {pendingDomains.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Pending Domains</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {error && <div className="text-red-500 mb-4">{error}</div>}
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2 text-left">ID</th>
+                    <th className="px-4 py-2 text-left">Name</th>
+                    <th className="px-4 py-2 text-left">Domain</th>
+                    <th className="px-4 py-2 text-left">Category Input</th>
+                    <th className="px-4 py-2 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingDomains.map((d) => (
+                    <tr key={d.id}>
+                      <td className="border-t px-4 py-2">{d.id}</td>
+                      <td className="border-t px-4 py-2">{d.name || "-"}</td>
+                      <td className="border-t px-4 py-2">{d.domain || "-"}</td>
+                      <td className="border-t px-4 py-2">
+                        <Input
+                          value={approving === d.id ? approvingCategory : ""}
+                          onChange={(e) => {
+                            setApproving(d.id);
+                            setApprovingCategory(e.target.value);
+                          }}
+                          placeholder="e.g., AI Tool"
+                          className="max-w-[200px]"
+                        />
+                      </td>
+                      <td className="border-t px-4 py-2">
+                        <div className="flex gap-2">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            disabled={
+                              approving === d.id && !approvingCategory.trim()
+                            }
+                            onClick={() =>
+                              handleApprove(d.id, approvingCategory)
+                            }
+                          >
+                            {approving === d.id ? "Approving..." : "Approve"}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            disabled={removing === d.id}
+                            onClick={() => handleDeny(d.id)}
+                          >
+                            {removing === d.id ? "Denying..." : "Deny"}
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       {/* Monitoring Card */}
       <Card>
         <CardHeader>
@@ -199,10 +305,10 @@ export default function ManagementPage() {
           </div>
         </CardContent>
       </Card>
-      {/* Domains Card */}
+      {/* Approved Domains Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Domains</CardTitle>
+          <CardTitle>Approved Domains</CardTitle>
         </CardHeader>
         <CardContent>
           {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -271,8 +377,8 @@ export default function ManagementPage() {
                       Loading...
                     </td>
                   </tr>
-                ) : domains.length > 0 ? (
-                  domains.map((d) => (
+                ) : approvedDomains.length > 0 ? (
+                  approvedDomains.map((d) => (
                     <tr key={d.id}>
                       <td className="border-t px-4 py-2">{d.id}</td>
                       <td className="border-t px-4 py-2">{d.name || "-"}</td>
