@@ -1,53 +1,74 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# AI Shield Dashboard
 
 <p align="center">
- The fastest way to build apps with Next.js and Supabase
+  <strong>Monitor, Guide, and Secure AI Usage Across Your Organization</strong>
 </p>
 
 <p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
+  AI Shield is a Chrome extension and dashboard solution that provides real-time visibility into AI tool usage, 
+  guides employees toward safer practices, and prevents accidental data leakage.
 </p>
+
 <br/>
+
+## Overview
+
+AI Shield addresses the critical gap between AI policy and employee behavior. While most organizations have AI usage policies, these are rarely enforced in real-time. AI Shield bridges this gap by:
+
+- **Detecting** AI tool usage across known domains and embedded widgets
+- **Guiding** users with contextual warnings and redirects to approved alternatives
+- **Logging** AI interactions (metadata only, never content) for security visibility
+- **Preventing** sensitive data exposure through configurable monitoring levels
+
+## The Problem
+
+Organizations face significant risks from unmanaged AI usage:
+
+- Employees copying sensitive data into unapproved AI tools
+- Accidental data leakage outside the organization
+- Exposure of intellectual property and personal data
+- Shadow AI usage that bypasses security controls
+
+Traditional approaches (policy documents and binary block/allow tools) fail to balance security with productivity.
+
+## The Solution
+
+AI Shield provides a layered approach:
+
+### Layer 1: Chrome Extension
+
+- Detects AI domains and interactions
+- Shows contextual warnings to users
+- Redirects to approved AI environments
+- Collects metadata logs (no content)
+
+### Layer 2: Dashboard (This Repository)
+
+- Real-time visibility into AI usage patterns
+- User and manager role-based access
+- Monitoring level configuration
+- Domain approval workflow
+- Comprehensive analytics and reporting
 
 ## Features
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Proxy
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Password-based authentication block installed via the [Supabase UI Library](https://supabase.com/ui/docs/nextjs/password-based-auth)
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Components with [shadcn/ui](https://ui.shadcn.com/)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+- **Real-time AI Detection**: Identify when users access AI tools
+- **Contextual Guidance**: Show warnings without blocking productivity
+- **Monitoring Levels**:
+  - **Low**: Basic domain and interaction tracking
+  - **High/Strict**: Content monitoring to prevent sensitive data entry
+- **Role-Based Access**:
+  - **Employees**: View their own activity logs
+  - **Managers**: Full visibility, configuration, and analytics
+- **Domain Management**: Approve/deny AI domains and configure categories
+- **Analytics Dashboard**: Track compliance rates, top tools, and risk patterns
 
-## Demo
+## Tech Stack
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
-
-## Deploy to Vercel
-
-Vercel deployment will guide you through creating a Supabase account and project.
-
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This+starter+configures+Supabase+Auth+to+use+cookies%2C+making+the+user%27s+session+available+throughout+the+entire+Next.js+app+-+Client+Components%2C+Server+Components%2C+Route+Handlers%2C+Server+Actions+and+Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png)
-
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
-
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+- **Frontend**: Next.js 14 with App Router, React, TypeScript
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Backend**: Supabase (Auth, Database, Real-time)
+- **Deployment**: Vercel-ready
 
 ## Clone and run locally
 
@@ -75,16 +96,17 @@ If you wish to just develop locally and not deploy to Vercel, [follow the steps 
 
 4. Rename `.env.example` to `.env.local` and update the following:
 
-  ```env
-  NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
-  ```
-  > [!NOTE]
-  > This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
-  > Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
-  > See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
+```env
+NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=[INSERT SUPABASE PROJECT API PUBLISHABLE OR ANON KEY]
+```
 
-  Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
+> [!NOTE]
+> This example uses `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, which refers to Supabase's new **publishable** key format.
+> Both legacy **anon** keys and new **publishable** keys can be used with this variable name during the transition period. Supabase's dashboard may show `NEXT_PUBLIC_SUPABASE_ANON_KEY`; its value can be used in this example.
+> See the [full announcement](https://github.com/orgs/supabase/discussions/29260) for more information.
+
+Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` can be found in [your Supabase project's API settings](https://supabase.com/dashboard/project/_?showConnect=true)
 
 5. You can now run the Next.js local development server:
 

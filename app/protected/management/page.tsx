@@ -212,11 +212,20 @@ export default function ManagementPage() {
 
   return (
     <div className="flex flex-col gap-8">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-3xl font-bold">Management Console</h1>
+        <p className="text-muted-foreground text-sm mt-1">
+          Configure AI Shield settings, approve domains, and manage monitoring
+          levels
+        </p>
+      </div>
+
       {/* Pending Domains Card */}
       {pendingDomains.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Pending Domains</CardTitle>
+            <CardTitle>Pending Domain Requests</CardTitle>
           </CardHeader>
           <CardContent>
             {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -283,7 +292,16 @@ export default function ManagementPage() {
       {/* Monitoring Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Monitoring</CardTitle>
+          <CardTitle>User Monitoring Levels</CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            Configure monitoring strictness for all users or individual
+            profiles.
+            <span className="font-semibold text-foreground">
+              {" "}
+              Strict mode
+            </span>{" "}
+            monitors typed content and prevents sensitive data entry.
+          </p>
         </CardHeader>
         <CardContent>
           {monitoringError && (
@@ -368,7 +386,11 @@ export default function ManagementPage() {
       {/* Approved Domains Card */}
       <Card>
         <CardHeader>
-          <CardTitle>Approved Domains</CardTitle>
+          <CardTitle>Approved AI Domains</CardTitle>
+          <p className="text-sm text-muted-foreground mt-1">
+            Manage the list of approved AI tools that users can access without
+            warnings
+          </p>
         </CardHeader>
         <CardContent>
           {error && <div className="text-red-500 mb-4">{error}</div>}

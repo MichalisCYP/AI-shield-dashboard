@@ -142,7 +142,12 @@ export function OverviewClient({ logs }: OverviewClientProps) {
     <div className="space-y-6">
       {/* Header with Time Filter */}
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Security Overview</h1>
+        <div>
+          <h1 className="text-3xl font-bold">AI Shield Dashboard</h1>
+          <p className="text-muted-foreground text-sm mt-1">
+            Monitor and analyze AI usage across your organization
+          </p>
+        </div>
         <select
           value={timeFilter}
           onChange={(e) => setTimeFilter(e.target.value as TimeFilter)}

@@ -50,77 +50,86 @@ export default async function LogsPage() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Logs</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {error && (
-          <div className="text-red-500 mb-4">
-            Error loading logs: {error.message}
-          </div>
-        )}
-        <div className="overflow-x-auto space-y-6">
-          {Object.keys(groupedLogs).length > 0 ? (
-            Object.entries(groupedLogs).map(([username, userLogs]) => (
-              <div
-                key={username}
-                className="border-2 rounded-lg p-4 bg-muted/30"
-              >
-                <div className="font-bold text-xl mb-4 pb-2 border-b-2">
-                  Username: {username}
-                </div>
-                <table className="min-w-full text-sm">
-                  <thead>
-                    <tr>
-                      <th className="px-4 py-2 text-left">ID</th>
-                      <th className="px-4 py-2 text-left">Created At</th>
-                      <th className="px-4 py-2 text-left">User ID</th>
-                      <th className="px-4 py-2 text-left">Domain</th>
-                      <th className="px-4 py-2 text-left">AI Tool</th>
-                      <th className="px-4 py-2 text-left">Category</th>
-                      <th className="px-4 py-2 text-left">URL</th>
-                      <th className="px-4 py-2 text-left">Log Type</th>
-                      <th className="px-4 py-2 text-left">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userLogs.map((log: any) => (
-                      <tr key={log.id}>
-                        <td className="border-t px-4 py-2">{log.id}</td>
-                        <td className="border-t px-4 py-2">
-                          {new Date(log.created_at).toLocaleString()}
-                        </td>
-                        <td className="border-t px-4 py-2">
-                          {log.user_id || "-"}
-                        </td>
-                        <td className="border-t px-4 py-2">
-                          {log.domain || "-"}
-                        </td>
-                        <td className="border-t px-4 py-2">
-                          {log.ai_tool_name || "-"}
-                        </td>
-                        <td className="border-t px-4 py-2">
-                          {log.ai_category || "-"}
-                        </td>
-                        <td className="border-t px-4 py-2">{log.url || "-"}</td>
-                        <td className="border-t px-4 py-2">
-                          {log.log_type || "-"}
-                        </td>
-                        <td className="border-t px-4 py-2">
-                          {log.action || "-"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ))
-          ) : (
-            <div className="text-center py-4">No logs found.</div>
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-3xl font-bold">Activity Logs</h1>
+        <p className="text-muted-foreground text-sm mt-1">
+          {userRole === "manager"
+            ? "View all AI usage activity across your organization"
+            : "View your AI usage activity history"}
+        </p>
+      </div>
+      <Card>
+        <CardContent className="pt-6">
+          {error && (
+            <div className="text-red-500 mb-4">
+              Error loading logs: {error.message}
+            </div>
           )}
-        </div>
-      </CardContent>
-    </Card>
+          <div className="overflow-x-auto space-y-6">
+            {Object.keys(groupedLogs).length > 0 ? (
+              Object.entries(groupedLogs).map(([username, userLogs]) => (
+                <div
+                  key={username}
+                  className="border-2 rounded-lg p-4 bg-muted/30"
+                >
+                  <div className="font-bold text-xl mb-4 pb-2 border-b-2">
+                    Username: {username}
+                  </div>
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr>
+                        <th className="px-4 py-2 text-left">ID</th>
+                        <th className="px-4 py-2 text-left">Created At</th>
+                        <th className="px-4 py-2 text-left">User ID</th>
+                        <th className="px-4 py-2 text-left">Domain</th>
+                        <th className="px-4 py-2 text-left">AI Tool</th>
+                        <th className="px-4 py-2 text-left">Category</th>
+                        <th className="px-4 py-2 text-left">URL</th>
+                        <th className="px-4 py-2 text-left">Log Type</th>
+                        <th className="px-4 py-2 text-left">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {userLogs.map((log: any) => (
+                        <tr key={log.id}>
+                          <td className="border-t px-4 py-2">{log.id}</td>
+                          <td className="border-t px-4 py-2">
+                            {new Date(log.created_at).toLocaleString()}
+                          </td>
+                          <td className="border-t px-4 py-2">
+                            {log.user_id || "-"}
+                          </td>
+                          <td className="border-t px-4 py-2">
+                            {log.domain || "-"}
+                          </td>
+                          <td className="border-t px-4 py-2">
+                            {log.ai_tool_name || "-"}
+                          </td>
+                          <td className="border-t px-4 py-2">
+                            {log.ai_category || "-"}
+                          </td>
+                          <td className="border-t px-4 py-2">
+                            {log.url || "-"}
+                          </td>
+                          <td className="border-t px-4 py-2">
+                            {log.log_type || "-"}
+                          </td>
+                          <td className="border-t px-4 py-2">
+                            {log.action || "-"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-4">No logs found.</div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
