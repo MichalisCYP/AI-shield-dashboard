@@ -5,7 +5,9 @@ export default async function LogsPage() {
   const supabase = await createClient();
   const { data: logs, error } = await supabase
     .from("logs")
-    .select("id, created_at, user_id, profiles:profiles(username)")
+    .select(
+      `id, created_at, user_id, domain, ai_tool_name, ai_category, url, log_type, action, profiles:profiles(username)`,
+    )
     .order("created_at", { ascending: false });
 
   // Group logs by username
@@ -42,6 +44,12 @@ export default async function LogsPage() {
                       <th className="px-4 py-2 text-left">ID</th>
                       <th className="px-4 py-2 text-left">Created At</th>
                       <th className="px-4 py-2 text-left">User ID</th>
+                      <th className="px-4 py-2 text-left">Domain</th>
+                      <th className="px-4 py-2 text-left">AI Tool</th>
+                      <th className="px-4 py-2 text-left">Category</th>
+                      <th className="px-4 py-2 text-left">URL</th>
+                      <th className="px-4 py-2 text-left">Log Type</th>
+                      <th className="px-4 py-2 text-left">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -53,6 +61,22 @@ export default async function LogsPage() {
                         </td>
                         <td className="border-t px-4 py-2">
                           {log.user_id || "-"}
+                        </td>
+                        <td className="border-t px-4 py-2">
+                          {log.domain || "-"}
+                        </td>
+                        <td className="border-t px-4 py-2">
+                          {log.ai_tool_name || "-"}
+                        </td>
+                        <td className="border-t px-4 py-2">
+                          {log.ai_category || "-"}
+                        </td>
+                        <td className="border-t px-4 py-2">{log.url || "-"}</td>
+                        <td className="border-t px-4 py-2">
+                          {log.log_type || "-"}
+                        </td>
+                        <td className="border-t px-4 py-2">
+                          {log.action || "-"}
                         </td>
                       </tr>
                     ))}

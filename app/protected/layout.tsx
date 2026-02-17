@@ -34,6 +34,12 @@ export default function ProtectedLayout({
         {/* Side Navigation */}
         <aside className="w-48 min-h-[calc(100vh-4rem)] border-r border-border bg-background flex flex-col py-6 gap-2">
           <Link
+            href="/protected/overview"
+            className="px-4 py-2 rounded hover:bg-accent font-medium"
+          >
+            Overview
+          </Link>
+          <Link
             href="/protected/logs"
             className="px-4 py-2 rounded hover:bg-accent font-medium"
           >
